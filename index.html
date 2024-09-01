@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeita - Galletas Caseras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #4a773c;
+            color: #fff;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        header img {
+            max-width: 150px;
+            height: auto;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        nav {
+            background: #49690a;
+            padding: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #2d491c;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background-color: #1e3810;
+        }
+
+        .tabs {
+            display: flex;
+            cursor: pointer;
+            background: #c0c0c0;
+            margin: 20px 0;
+            border-radius: 5px;
+            justify-content: center;
+        }
+
+        .tabs div {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: #d0d0d0;
+        }
+
+        .tabs div.active {
+            background: #fff;
+            border-bottom: 2px solid #4a773c;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+            margin-bottom: 1px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .menu-item {
+            flex: 1 1 calc(30% - 20px);
+            margin: 10px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .menu-item img {
+            max-width: 80px;
+            height: 80px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .menu-item .description {
+            margin-top: 10px;
+            background: #f0f0f0;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .menu-item:hover .description {
+            display: block;
+        }
+
+        .menu-item input.quantity {
+            width: 60px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .menu-item button {
+            margin-top: 10px;
+            background-color: #4a773c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-item button:hover {
+            background-color: #3b5c28;
+        }
+
+        footer {
+            background: #101802;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        #view-cart {
+            background-color: #4a773c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        #view-cart:hover {
+            background-color: #3b5c28;
+        }
+
+        #cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #cart-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #cart-modal-content h2 {
+            margin-top: 0;
+            color: #4a773c;
+        }
+
+        #cart-modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #cart-modal-content th,
+        #cart-modal-content td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cart-modal-content th {
+            background-color: #f0f0f0;
+        }
+
+        #cart-modal-content td {
+            background-color: #f9f9f9;
+        }
+
+        #close-cart,
+        #send-whatsapp {
+            background-color: #4a773c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+
+        #close-cart:hover,
+        #send-whatsapp:hover {
+            background-color: #3b5c28;
+        }
+
+        .tab-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+
+        /* Nueva sección para la notificación */
+        #notification {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4a773c;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="logo.jpg" alt="Logo de Galeita">
+        <h1>Galeita</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about" class="nav-link" data-tab="about">Acerca de Nosotros</a></li>
+            <li><a href="#location" class="nav-link" data-tab="location">Ubicación</a></li>
+            <li><a href="#contact" class="nav-link" data-tab="contact">Contacto</a></li>
+            <li><a href="#menu" class="nav-link" data-tab="menu">Menú</a></li>
+        </ul>
+    </nav>
+
+    <div id="about" class="tab-content active">
+        <h2>Acerca de Nosotros</h2>
+        <img src="acerca-de-nosotros.jpg" alt="Acerca de Nosotros">
+        <p>En Galeita nos especializamos en la elaboración de galletas artesanales, utilizando solo los mejores ingredientes para ofrecer un sabor auténtico y delicioso. Nuestra pasión por la repostería nos impulsa a crear galletas frescas y de alta calidad para satisfacer los gustos más exigentes.</p>
+    </div>
+
+    <div id="location" class="tab-content">
+        <h2>Ubicación</h2>
+        <img src="ubicacion.jpg" alt="Ubicación">
+        <p>Nos encontramos en:</p>
+        <address>
+            Calle Falsa 123, <br> Ciudad Cochabamba, IM 45678, <br> País Ejemplo.
+        </address>
+    </div>
+
+    <div id="contact" class="tab-content">
+        <h2>Contacto</h2>
+        <img src="contacto.jpg" alt="Contacto">
+        <p>Teléfono: <a href="tel:+591 72775397">+591 72775397</a></p>
+        <p>Correo Electrónico: <a href="mailto:info@galeita.com">info@galeita.com</a></p>
+    </div>
+
+    <div id="menu" class="tab-content">
+        <h2>Menú</h2>
+        <div class="menu">
+            <div class="menu-item">
+                <img src="oreo.jpg" alt="Oreo">
+                <h3>Oreo</h3>
+                <p>BOB 6.00</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Oreo" data-price="6.00">Agregar al carrito</button>
+                <div class="description">Masa base de vainilla con pedazos generosos de Oreo y una mini Oreo para más sabor.</div>
+            </div>
+            <div class="menu-item">
+                <img src="limon-cheesecake.jpg" alt="Limón Cheesecake">
+                <h3>Limón Cheesecake</h3>
+                <p>BOB 7.00</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Limón Cheesecake" data-price="7.00">Agregar al carrito</button>
+                <div class="description">Masa base de limón, rellena de queso crema con chocolate blanco, dejando un sabor a pay de limón.</div>
+            </div>
+            <div class="menu-item">
+                <img src="red-velvet-cheesecake.jpg" alt="Red Velvet Cheesecake">
+                <h3>Red Velvet Cheesecake</h3>
+                <p>BOB 7.00</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Red Velvet Cheesecake" data-price="7.00">Agregar al carrito</button>
+                <div class="description">Masa sabor vainilla y cacao, con chips de chocolate blanco, rellena de queso crema.</div>
+            </div>
+            <div class="menu-item">
+                <img src="doble-chocolate.jpg" alt="Doble Chocolate">
+                <h3>Doble Chocolate</h3>
+                <p>BOB 5.50</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Doble Chocolate" data-price="5.50">Agregar al carrito</button>
+                <div class="description">Masa base de chocolate con chips de chocolate con leche y semi amargo.</div>
+            </div>
+            <div class="menu-item">
+                <img src="clasica-semi-amarga.jpg" alt="Clásica Semi Amarga">
+                <h3>Clásica Semi Amarga</h3>
+                <p>BOB 5.00</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Clásica Semi Amarga" data-price="5.00">Agregar al carrito</button>
+                <div class="description">Masa de galleta sabor vainilla y chips de chocolate semi amargo, el equilibrio perfecto.</div>
+            </div>
+            <div class="menu-item">
+                <img src="clasica.jpg" alt="Chocolate Blanco Macadamia">
+                <h3>Chocolate Blanco Macadamia</h3>
+                <p>BOB 7.50</p>
+                <input type="number" class="quantity" min="1" value="1">
+                <button class="add-to-cart" data-name="Chocolate Blanco Macadamia" data-price="7.50">Agregar al carrito</button>
+                <div class="description">Masa de galleta con trozos de chocolate blanco y nueces de macadamia, deliciosa combinación.</div>
+            </div>
+        </div>
+    </div>
+
+    <button id="view-cart">Ver carrito</button>
+
+    <div id="cart-modal">
+        <div id="cart-modal-content">
+            <h2>Carrito de Compras</h2>
+            <table id="cart-items">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items del carrito -->
+                </tbody>
+            </table>
+            <h3 id="total-price">Total: BOB 0.00</h3>
+            <button id="send-whatsapp">Enviar Pedido por WhatsApp</button>
+            <button id="close-cart">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Notificación -->
+    <div id="notification"></div>
+
+    <footer>
+        <p>&copy; 2023 Galeita. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const cartModal = document.getElementById('cart-modal');
+            const cartItemsTable = document.getElementById('cart-items').getElementsByTagName('tbody')[0];
+            const totalPriceElement = document.getElementById('total-price');
+            const sendWhatsappButton = document.getElementById('send-whatsapp');
+            const notification = document.getElementById('notification');
+
+            let cart = [];
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const tab = this.dataset.tab;
+
+                    tabContents.forEach(content => {
+                        if (content.id === tab) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const name = this.getAttribute('data-name');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const quantity = parseInt(this.previousElementSibling.value);
+
+                    const existingItem = cart.find(item => item.name === name);
+                    if (existingItem) {
+                        existingItem.quantity += quantity;
+                    } else {
+                        cart.push({ name, price, quantity });
+                    }
+
+                    updateCart();
+                    showNotification(`La galleta "${name}" fue agregada correctamente`);
+                });
+            });
+
+            document.getElementById('view-cart').addEventListener('click', function () {
+                cartModal.style.display = 'flex';
+            });
+
+            document.getElementById('close-cart').addEventListener('click', function () {
+                cartModal.style.display = 'none';
+            });
+
+            function updateCart() {
+                cartItemsTable.innerHTML = '';
+                let totalPrice = 0;
+
+                cart.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>BOB ${(item.price * item.quantity).toFixed(2)}</td>
+                    `;
+                    cartItemsTable.appendChild(row);
+
+                    totalPrice += item.price * item.quantity;
+                    
+                });
+
+                totalPriceElement.textContent = `Total: BOB ${totalPrice.toFixed(2)}`;
+            }
+
+            sendWhatsappButton.addEventListener('click', function () {
+                const whatsappNumber = "+59172775397"; // Reemplaza este número con el tuyo
+                let whatsappMessage = "Pedido de Galeita:%0A%0A";
+
+                cart.forEach(item => {
+                    whatsappMessage += `${item.quantity} x ${item.name} - BOB ${(item.price * item.quantity).toFixed(2)}%0A`;
+                });
+
+                whatsappMessage += `%0ATotal: BOB ${totalPriceElement.textContent.split(' ')[2]}`;
+
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+                window.open(whatsappUrl, '_blank');
+            });
+
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
